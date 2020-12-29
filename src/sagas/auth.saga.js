@@ -1,4 +1,4 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, take, takeEvery, takeLatest} from 'redux-saga/effects';
 import API_INSTANCE from '../config/connection';
 import * as actionTypes from '../constants/index';
 
@@ -7,9 +7,10 @@ import * as actionTypes from '../constants/index';
  * @param {user email address} email
  * @param {string password} password
  */
-function* login() {
+function* login(payload) {
   // eslint-disable-next-line no-alert
-  alert('called');
+  const {email, password} = payload.payload;
+  alert(email);
   // try {
   //   const response = yield API_INSTANCE.post('/auth/login', {
   //     email: email,

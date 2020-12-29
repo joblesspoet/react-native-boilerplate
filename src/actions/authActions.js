@@ -14,10 +14,10 @@ const loginSuccessAction = (loginObj) => {
   };
 };
 
-const loginRequestAction = (payload) => {
+const loginRequestAction = (data) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
-    payload: payload,
+    payload: data,
   };
 };
 
