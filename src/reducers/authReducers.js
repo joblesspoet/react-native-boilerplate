@@ -7,6 +7,8 @@ const initialState = {
   is_loading: false,
   lastError: undefined,
   hasError: false,
+  email: null,
+  password: null,
 };
 
 const authReduicer = (state = initialState, action) => {
@@ -15,6 +17,8 @@ const authReduicer = (state = initialState, action) => {
       return {
         ...state,
         is_loading: true,
+        email: action.payload.email,
+        password: action.payload.password,
       };
 
     case actionTypes.AUTH_ACTIONS.LOGIN_FAILURE:

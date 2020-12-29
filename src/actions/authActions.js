@@ -1,49 +1,50 @@
 import * as actionTypes from '../constants/index';
 
-const setUser = (userObj) => {
+const setUserAction = (userObj) => {
   return {
     type: actionTypes.AUTH_ACTIONS.SET_USER,
     payload: userObj,
   };
 };
 
-const loginSuccess = (loginObj) => {
+const loginSuccessAction = (loginObj) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_SUCCESS,
     payload: loginObj,
   };
 };
 
-const loginRequest = () => {
+const loginRequestAction = (payload) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
+    payload: payload,
   };
 };
 
-const loginError = (error) => {
+const loginErrorAction = (error) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_FAILURE,
     payload: error,
   };
 };
 
-const logOut = () => {
+const logOutAction = () => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGOUT_SUCCESS,
   };
 };
 
-const resetAuthValues = () => {
+const resetAuthValuesAction = () => {
   return {
     type: actionTypes.AUTH_ACTIONS.RESET_AUTH_STATE,
   };
 };
 
 export default {
-  setUser,
-  loginRequest,
-  logOut,
-  loginError,
-  loginSuccess,
-  resetAuthValues,
+  setUserAction,
+  loginRequestAction,
+  logOutAction,
+  loginErrorAction,
+  loginSuccessAction,
+  resetAuthValuesAction,
 };

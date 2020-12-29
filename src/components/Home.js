@@ -6,13 +6,15 @@ import {
   View,
   Text,
   StatusBar,
-  Button,
   TouchableOpacity,
 } from 'react-native';
-
+import {useDispatch} from 'react-redux';
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
+import allActions from '../actions/';
 
 function Home({navigation}) {
+  const dispatch = useDispatch();
+
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -33,7 +35,16 @@ function Home({navigation}) {
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
                 screen and then come back to see your edits.
               </Text>
-              <TouchableOpacity style={styles.Button}>
+              <TouchableOpacity
+                onPress={() =>
+                  dispatch(
+                    allActions.authActions.loginRequestAction({
+                      email: 'sanglavi@hotmail.com',
+                      password: 'test1234',
+                    }),
+                  )
+                }
+                style={styles.Button}>
                 <Text>Hello World</Text>
               </TouchableOpacity>
             </View>
