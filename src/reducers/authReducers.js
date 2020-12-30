@@ -21,7 +21,7 @@ const authReduicer = (state = initialState, action) => {
         password: action.payload.password,
       };
 
-    case actionTypes.AUTH_ACTIONS.LOGIN_FAILURE:
+    case actionTypes.AUTH_ACTIONS.AUTH_FAILURE:
       return {
         ...state,
         is_loading: false,

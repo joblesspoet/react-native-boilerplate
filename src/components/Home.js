@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +11,24 @@ import {
 import {useDispatch} from 'react-redux';
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 import allActions from '../actions/';
+import {useSelector} from "react-redux";
+import { API_INTERCEPTOR } from '../config/connection';
 
 function Home({navigation}) {
   const dispatch = useDispatch();
+  const authObj = useSelector((state) => state.auth);
+  useEffect(() => {
+    const activate_headers = async () => {
+      await API_INTERCEPTOR(authObj.access_token);
+    };
+    if (authObj.is_logged_in) {
+      activate_headers();
+    }
+  }, []);
+
+  useEffect(() => {
+    alert(JSON.stringify(authObj))
+  }, [authObj.access_token]);
 
   return (
     <>
@@ -35,18 +50,30 @@ function Home({navigation}) {
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
                 screen and then come back to see your edits.
               </Text>
-              <TouchableOpacity
-                onPress={() =>
-                  dispatch(
-                    allActions.authActions.loginRequestAction({
-                      email: 'sanglavi@hotmail.com',
-                      password: 'test1234',
-                    }),
-                  )
-                }
-                style={styles.Button}>
-                <Text>Hello World</Text>
-              </TouchableOpacity>
+              {!authObj.is_logged_in && (
+                <TouchableOpacity
+                  onPress={() =>
+                    dispatch(
+                      allActions.authActions.loginRequestAction({
+                        email: 'joble.sspoet@gmail.com',
+                        password: 'secret1234',
+                      }),
+                    )
+                  }
+                  style={styles.Button}>
+                  <Text>Login</Text>
+                </TouchableOpacity>)
+              }
+
+              {authObj.is_logged_in && (
+                <TouchableOpacity
+                  onPress={() =>
+                    dispatch(allActions.authActions.logOutAction())
+                  }
+                  style={styles.Button}>
+                  <Text>Logout</Text>
+                </TouchableOpacity>)
+              }
             </View>
           </View>
         </ScrollView>

@@ -21,14 +21,20 @@ const loginRequestAction = (data) => {
   };
 };
 
-const loginErrorAction = (error) => {
+const authErrorAction = (error) => {
   return {
-    type: actionTypes.AUTH_ACTIONS.LOGIN_FAILURE,
+    type: actionTypes.AUTH_ACTIONS.AUTH_FAILURE,
     payload: error,
   };
 };
 
 const logOutAction = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.LOGOUT_REQUEST,
+  };
+};
+
+const logoutSuccessAction = (loginObj) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGOUT_SUCCESS,
   };
@@ -44,7 +50,8 @@ export default {
   setUserAction,
   loginRequestAction,
   logOutAction,
-  loginErrorAction,
+  authErrorAction,
   loginSuccessAction,
   resetAuthValuesAction,
+  logoutSuccessAction,
 };
