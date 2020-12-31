@@ -1,4 +1,9 @@
 import * as actionTypes from '../constants/index';
+import {
+  API_INSTANCE,
+  API_END_POINTS,
+  initiate_interceptor,
+} from '../config/connection';
 
 const setUser = (userObj) => {
   return {
@@ -39,11 +44,80 @@ const resetAuthValues = () => {
   };
 };
 
-export default {
-  setUser,
-  loginRequest,
-  logOut,
-  loginError,
-  loginSuccess,
-  resetAuthValues,
+const setAuthorizationHeader = () => {
+  return async (dispatch, getState) => {
+    const objAuth = getState().auth;
+    API_INSTANCE.interceptors.request.use(
+      async (conf) => {
+        if (objAuth.access_token && !conf.headers.Authorization) {
+          conf.headers.Authorization = `Bearer ${objAuth.access_token}`;
+        }
+        return conf;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  };
 };
+
+/**
+ * Login user to application.
+ * @param {string} email | user email address
+ * @param {string} password | user password as string
+ */
+const doUserLogin = (email, password) => {
+  return async (dispatch, getState) => {
+    try {
+      await API_INSTANCE.post(API_END_POINTS.AUTH_END_POINTS.LOGIN, {
+        email: email,
+        password: password,
+      }).then((resp) => {
+        dispatch(
+          loginSuccess({
+            access_token: resp.data.access_token,
+            user: resp.data.user,
+          }),
+        );
+        dispatch(setAuthorizationHeader());
+      });
+    } catch (error) {
+      if (error.message === 'Network Error') {
+        dispatch(loginError('Network error detected.'));
+      } else if (error?.response?.status === 422) {
+        dispatch(loginError(error?.response?.data.errors));
+      } else {
+        dispatch(loginError(error.message));
+      }
+    }
+  };
+};
+
+/**
+ * Logout User from Application
+ */
+const doUserLogout = () => {
+  return async (dispatch, getState) => {
+    // console.log(getState().auth);
+    // console.log(email, password);
+    // dispatch(loginRequest());
+    try {
+      await API_INSTANCE.post(API_END_POINTS.AUTH_END_POINTS.LOGOUT).then(
+        (resp) => {
+          dispatch(logOut());
+        },
+      );
+    } catch (error) {
+      if (error.message === 'Network Error') {
+        dispatch(loginError('Network error detected.'));
+      } else if (error.response.status === 401) {
+        console.log(error.message);
+        dispatch(logOut());
+      } else {
+        dispatch(loginError(error.message));
+      }
+    }
+  };
+};
+
+export default {doUserLogin, doUserLogout};

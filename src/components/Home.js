@@ -6,13 +6,15 @@ import {
   View,
   Text,
   StatusBar,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
+import {connect} from 'react-redux';
+import allActions from '../actions/index';
 
-function Home({navigation}) {
+function Home(props) {
+  const {is_logged_in} = props.auth;
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -33,9 +35,22 @@ function Home({navigation}) {
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
                 screen and then come back to see your edits.
               </Text>
-              <TouchableOpacity style={styles.Button}>
-                <Text>Hello World</Text>
-              </TouchableOpacity>
+              {!is_logged_in && (
+                <TouchableOpacity
+                  onPress={() =>
+                    props.doUserLogin('joble.sspoet@gmail.com', 'secret1234')
+                  }
+                  style={styles.Button}>
+                  <Text>Login</Text>
+                </TouchableOpacity>
+              )}
+              {is_logged_in && (
+                <TouchableOpacity
+                  onPress={() => props.doUserLogout()}
+                  style={styles.Button}>
+                  <Text>Logout</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </ScrollView>
@@ -97,4 +112,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapStateToProps, {...allActions.authActions})(Home);

@@ -5,14 +5,14 @@ import configureStore from './src/store/configureStore';
 import {PersistGate} from 'redux-persist/integration/react';
 // import {API_INTERCEPTOR} from './config/connection';
 
-const {store, persistor} = configureStore();
+const {store, storePersister} = configureStore();
 
 const App: () => React$Node = () => {
   return (
     <>
       <React.Suspense fallback="<div>Please Wait.....</div>">
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate loading={null} persistor={storePersister}>
             <Routes />
           </PersistGate>
         </Provider>

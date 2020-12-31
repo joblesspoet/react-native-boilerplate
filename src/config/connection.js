@@ -1,7 +1,16 @@
 import axios from 'axios';
 
-const API_INSTANCE = axios.create({
-  baseURL: 'http://10.28.87.112:8001/api',
+export const API_INSTANCE = axios.create({
+  baseURL: 'https://incontext.demo3.appelit.com/api',
 });
 
-export default API_INSTANCE;
+export const API_END_POINTS = {
+  AUTH_END_POINTS: {
+    LOGIN: '/auth/login',
+    REGISTER: '/auth/register',
+    FORGOT_PASSWORD: '/auth/forgot-password',
+    RESET_PASSWORD: '/auth/reset-password',
+    REFRESH_TOKEN: '/refresh-token',
+    LOGOUT: '/logout',
+  },
+};
