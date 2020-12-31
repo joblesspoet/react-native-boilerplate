@@ -1,16 +1,12 @@
 import * as actionTypes from '../constants/index';
-import {
-  API_INSTANCE,
-  API_END_POINTS,
-  initiate_interceptor,
-} from '../config/connection';
+import {API_INSTANCE, API_END_POINTS} from '../config/connection';
 
-const setUser = (userObj) => {
-  return {
-    type: actionTypes.AUTH_ACTIONS.SET_USER,
-    payload: userObj,
-  };
-};
+// const setUser = (userObj) => {
+//   return {
+//     type: actionTypes.AUTH_ACTIONS.SET_USER,
+//     payload: userObj,
+//   };
+// };
 
 const loginSuccess = (loginObj) => {
   return {
@@ -19,11 +15,11 @@ const loginSuccess = (loginObj) => {
   };
 };
 
-const loginRequest = () => {
-  return {
-    type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
-  };
-};
+// const loginRequest = () => {
+//   return {
+//     type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
+//   };
+// };
 
 const loginError = (error) => {
   return {
@@ -38,11 +34,11 @@ const logOut = () => {
   };
 };
 
-const resetAuthValues = () => {
-  return {
-    type: actionTypes.AUTH_ACTIONS.RESET_AUTH_STATE,
-  };
-};
+// const resetAuthValues = () => {
+//   return {
+//     type: actionTypes.AUTH_ACTIONS.RESET_AUTH_STATE,
+//   };
+// };
 
 const setAuthorizationHeader = () => {
   return async (dispatch, getState) => {
@@ -56,7 +52,7 @@ const setAuthorizationHeader = () => {
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
   };
 };
