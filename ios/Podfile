@@ -10,6 +10,8 @@ target 'BoilerPlateApp' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'BoilerPlateAppTests' do
     inherit! :complete
     # Pods for testing
