@@ -7,16 +7,16 @@ const setUser = (userObj) => {
   };
 };
 
+const loginRequest = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
+  };
+};
+
 const loginSuccess = (loginObj) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_SUCCESS,
     payload: loginObj,
-  };
-};
-
-const loginRequest = () => {
-  return {
-    type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
   };
 };
 
@@ -39,6 +39,27 @@ const resetAuthValues = () => {
   };
 };
 
+const doUserLogin = (email, password) => {  
+  console.log(email, password)  
+  return async (dispatch, getState) => {
+    await console.log(getState())
+  }
+  // return async dispatch => {
+
+  //     dispatch(loginSuccess({
+  //       access_token: 'asdfasdf sdfasdf',
+  //       user: {
+  //         name: email,
+  //         email: email
+  //       }
+  //     }));
+  //     // try {
+          
+  //     // } catch (error) {
+  //     //     dispatch(loginError(error));
+  //     // }
+  // }
+}
 export default {
   setUser,
   loginRequest,
@@ -46,4 +67,5 @@ export default {
   loginError,
   loginSuccess,
   resetAuthValues,
+  doUserLogin
 };

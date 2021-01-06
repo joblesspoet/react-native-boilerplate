@@ -9,10 +9,13 @@ import {
   Button,
   TouchableOpacity,
 } from 'react-native';
-
+import {doUserLogin} from '../actions/index';
 import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
+import { connect, useSelector } from 'react-redux'
 
-function Home({navigation}) {
+function Home(props) {
+  // const state = useSelector(state => state)
+  console.log(props.auth)
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
@@ -33,7 +36,7 @@ function Home({navigation}) {
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
                 screen and then come back to see your edits.
               </Text>
-              <TouchableOpacity style={styles.Button}>
+              <TouchableOpacity onPress={() => doUserLogin('test@gmail.com','test123') } style={styles.Button}>
                 <Text>Hello World</Text>
               </TouchableOpacity>
             </View>
@@ -97,4 +100,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+const mapStateToProps = (state) => {
+  return {auth: state.auth}
+}
+export default connect(mapStateToProps, {doUserLogin})(Home);
