@@ -10,8 +10,6 @@ import Validator from 'validatorjs';
 import en from 'validatorjs/src/lang/en';
 
 Validator.setMessages('en', en);
-// import { emailValidator } from '../helpers/emailValidator'
-// import { passwordValidator } from '../helpers/passwordValidator'
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState({value: '', error: ''});
@@ -35,18 +33,6 @@ const Login = ({navigation}) => {
       });
       return;
     }
-    alert('all fine');
-    // const emailError = emailValidator(email.value)
-    // const passwordError = passwordValidator(password.value)
-    // if (emailError || passwordError) {
-    //   setEmail({ ...email, error: emailError })
-    //   setPassword({ ...password, error: passwordError })
-    //   return
-    // }
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: 'Dashboard' }],
-    // })
   };
 
   return (
