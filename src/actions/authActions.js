@@ -1,124 +1,127 @@
+import {API_INSTANCE, API_ROUTES} from '../config/connection';
 import * as actionTypes from '../constants/index';
-import {API_INSTANCE, API_END_POINTS} from '../config/connection';
 
-// const setUser = (userObj) => {
-//   return {
-//     type: actionTypes.AUTH_ACTIONS.SET_USER,
-//     payload: userObj,
-//   };
-// };
-
-const loginRequest = () => {
+export const setUser = (userObj) => {
   return {
-    type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
+    type: actionTypes.AUTH_ACTIONS.SET_USER,
+    payload: userObj,
   };
 };
 
-const loginSuccess = (loginObj) => {
+export const loginSuccess = (loginObj) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_SUCCESS,
     payload: loginObj,
   };
 };
-// const loginRequest = () => {
-//   return {
-//     type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
-//   };
-// };
 
-const loginError = (error) => {
+export const loginRequest = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.LOGIN_REQUEST,
+  };
+};
+
+export const loginError = (error) => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGIN_FAILURE,
     payload: error,
   };
 };
 
-const logOut = () => {
+export const refreshToken = (token) => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.REFRESH_TOKEN,
+    payload: token,
+  };
+};
+
+export const logOut = () => {
   return {
     type: actionTypes.AUTH_ACTIONS.LOGOUT_SUCCESS,
   };
 };
 
-// const resetAuthValues = () => {
-//   return {
-//     type: actionTypes.AUTH_ACTIONS.RESET_AUTH_STATE,
-//   };
-// };
+export const logoutError = (error) => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.LOGOUT_FAILURE,
+    payload: error,
+  };
+};
 
-const setAuthorizationHeader = () => {
-  return async (dispatch, getState) => {
-    const objAuth = getState().auth;
-    API_INSTANCE.interceptors.request.use(
-      async (conf) => {
-        if (objAuth.access_token && !conf.headers.Authorization) {
-          conf.headers.Authorization = `Bearer ${objAuth.access_token}`;
-        }
-        return conf;
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
+export const resetAuthValues = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.RESET_AUTH_STATE,
+  };
+};
+
+export const changeLocale = (locale) => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.LANGUAGE_UPDATE,
+    payload: locale,
+  };
+};
+
+export const setInviteCode = (invite_code) => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.VALIDATE_INVITECODE_REQUEST,
+    payload: invite_code,
+  };
+};
+
+export const onInviteSuccess = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.INVITECODE_SUCCESS,
+  };
+};
+
+export const onInviteFail = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.INVITECODE_FAIL,
+  };
+};
+
+export const setSMSCode = (sms_code) => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.VALIDATE_SMSCODE_REQUEST,
+    payload: sms_code,
+  };
+};
+
+export const onSMSSuccess = () => {
+  return {
+    type: actionTypes.AUTH_ACTIONS.SMSCODE_SUCCESS,
   };
 };
 
 /**
- * Login user to application.
- * @param {string} email | user email address
- * @param {string} password | user password as string
+ * login user action.
+ * @param {string} userEmail user email
+ * @param {string} userPassword user password
+ * @returns
  */
-const doUserLogin = (email, password) => {
-  return async (dispatch, getState) => {
-    try {
-      await API_INSTANCE.post(API_END_POINTS.AUTH_END_POINTS.LOGIN, {
-        email: email,
-        password: password,
-      }).then((resp) => {
-        dispatch(
-          loginSuccess({
-            access_token: resp.data.access_token,
-            user: resp.data.user,
-          }),
-        );
-        dispatch(setAuthorizationHeader());
+export const loginUser = (userEmail, userPassword) => {
+  return async (dispatch) => {
+    dispatch(loginRequest());
+    const obj = {
+      method: 'POST',
+      url: API_ROUTES.AUTH_ACTIONS.LOG,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        email: userEmail,
+        password: userPassword,
+      },
+    };
+
+    await API_INSTANCE(obj)
+      .then((resp) => {
+        console.log('login success: ');
+        dispatch(loginSuccess(resp));
+      })
+      .catch((error) => {
+        console.log('Error in login: ', error);
+        dispatch(loginError(error.response));
       });
-    } catch (error) {
-      if (error.message === 'Network Error') {
-        dispatch(loginError('Network error detected.'));
-      } else if (error?.response?.status === 422) {
-        dispatch(loginError(error?.response?.data.errors));
-      } else {
-        dispatch(loginError(error.message));
-      }
-    }
   };
 };
-
-/**
- * Logout User from Application
- */
-const doUserLogout = () => {
-  return async (dispatch, getState) => {
-    // console.log(getState().auth);
-    // console.log(email, password);
-    // dispatch(loginRequest());
-    try {
-      await API_INSTANCE.post(API_END_POINTS.AUTH_END_POINTS.LOGOUT).then(
-        (resp) => {
-          dispatch(logOut());
-        },
-      );
-    } catch (error) {
-      if (error.message === 'Network Error') {
-        dispatch(loginError('Network error detected.'));
-      } else if (error.response.status === 401) {
-        console.log(error.message);
-        dispatch(logOut());
-      } else {
-        dispatch(loginError(error.message));
-      }
-    }
-  };
-};
-
-export default {doUserLogin, doUserLogout};
